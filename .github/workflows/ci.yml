@@ -29,10 +29,22 @@ jobs:
         echo "Running tests..."
         pytest || true
 
-    - name: Build Docker Image
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, Tag, and Push Docker Image
       run: |
-        echo "Building Docker image..."
-        docker build -t my-backend -f docker/backend/Dockerfile .
+        IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+        docker build -t $IMAGE_URI -f docker/backend/Dockerfile .
+        docker push $IMAGE_URI
+        echo "Pushed to ECR"
 
     - name: Success message
       run: echo "Docker Image built successfully!"
