@@ -28,10 +28,11 @@ jobs:
         cd app/backend
         echo "Running tests..."
         pytest || true
+
     - name: Build Docker Image
       run: |
         echo "Building Docker image..."
-        docker build -t my-backend ./docker/backend/Dockerfile .
+        docker build -t my-backend -f docker/backend/Dockerfile .
 
     - name: Success message
       run: echo "Docker Image built successfully!"
