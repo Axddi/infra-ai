@@ -26,7 +26,7 @@ jobs:
           | docker login --username AWS --password-stdin 678882708618.dkr.ecr.ap-south-1.amazonaws.com
 
       - name: Build Image
-        run: docker build -t my-backend .
+        run: docker build -t my-backend -f docker/backend/dockerfile .
 
       - name: Tag Image
         run: docker tag my-backend:latest 678882708618.dkr.ecr.ap-south-1.amazonaws.com/my-backend:latest
