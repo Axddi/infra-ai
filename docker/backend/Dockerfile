@@ -2,9 +2,8 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY app/backend/requirements.txt .
-RUN pip install -r requirements.txt
+COPY . .
 
-COPY app/backend .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "app.py"]
+CMD ["python", "src/main.py"]
